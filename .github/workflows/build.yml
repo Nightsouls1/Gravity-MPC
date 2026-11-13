@@ -1,44 +1,4 @@
-name: Build MPC Plugin
-
-on:
-  push:
-    branches: [ main, master ]
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Install Build Dependencies & Cross-Compilers
+- name: Clone SDK Securely with Token
         run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential cmake ninja-build g++-arm-linux-gnueabihf gcc-arm-linux-gnueabihf unzip
-
-      - name: Download and Extract SDK Securely via API
-        run: |
-          rm -rf sdk sdk.zip
-          curl -L \
-            -H "Authorization: token ${{ secrets.SDK_PAT }}" \
-            -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/inmusic-software/mpc-plugins-sdk/zipball/main \
-            -o sdk.zip
-          unzip -q sdk.zip
-          mv inmusic-software-mpc-plugins-sdk-* sdk
-
-      - name: Run Build Tool
-        run: |
-          python sdk/tools/build.py plugins/Gravity
-
-      - name: Upload Plugin Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Gravity-MPC-Plugin
-          path: plugins/Gravity/build/
+          rm -rf sdk
+          git clone https://x-access-token:${{ secrets.SDK_PAT }}@github.com/inmusic-software/mpc-plugins-sdk.git sdk
