@@ -20,7 +20,14 @@ jobs:
       - name: Install Build Dependencies & Cross-Compilers
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential cmake ninja-build g++-arm-linux-gnueabihf gcc-arm-linux-gnueabihf
+          sudo apt-get install -y build-essential cmake ninja-build g++-arm-linux-gnueabihf gcc-arm-linux-gnueabihf unzip
+
+      - name: Download and Extract SDK Securely
+        run: |
+          rm -rf sdk sdk.zip
+          curl -L -u x-access-token:${{ secrets.SDK_PAT }} https://github.com/inmusic-software/mpc-plugins-sdk/archive/refs/heads/main.zip -o sdk.zip
+          unzip -q sdk.zip
+          mv mpc-plugins-sdk-main sdk
 
       - name: Run Build Tool
         run: |
@@ -31,3 +38,4 @@ jobs:
         with:
           name: Gravity-MPC-Plugin
           path: plugins/Gravity/build/
+          
