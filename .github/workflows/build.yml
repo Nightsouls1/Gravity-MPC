@@ -22,14 +22,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential cmake ninja-build g++-arm-linux-gnueabihf gcc-arm-linux-gnueabihf
 
-      - name: Verify SDK Presence
+      - name: Clone SDK Securely with Token
         run: |
-          if [ -d "sdk" ]; then
-            echo "SDK map succesvol gedetecteerd in repository."
-          else
-            echo "Fout: De 'sdk' map ontbreekt in de repository root."
-            exit 1
-          fi
+          rm -rf sdk
+          git clone https://x-access-token:${{ secrets.SDK_PAT }}@github.com/inmusic-software/mpc-plugins-sdk.git sdk
 
       - name: Run Build Tool
         run: |
