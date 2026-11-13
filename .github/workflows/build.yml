@@ -22,12 +22,16 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential cmake ninja-build g++-arm-linux-gnueabihf gcc-arm-linux-gnueabihf unzip
 
-      - name: Download and Extract SDK Securely
+      - name: Download and Extract SDK Securely via API
         run: |
           rm -rf sdk sdk.zip
-          curl -L -u x-access-token:${{ secrets.SDK_PAT }} https://github.com/inmusic-software/mpc-plugins-sdk/archive/refs/heads/main.zip -o sdk.zip
+          curl -L \
+            -H "Authorization: token ${{ secrets.SDK_PAT }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/inmusic-software/mpc-plugins-sdk/zipball/main \
+            -o sdk.zip
           unzip -q sdk.zip
-          mv mpc-plugins-sdk-main sdk
+          mv inmusic-software-mpc-plugins-sdk-* sdk
 
       - name: Run Build Tool
         run: |
@@ -38,4 +42,3 @@ jobs:
         with:
           name: Gravity-MPC-Plugin
           path: plugins/Gravity/build/
-          
