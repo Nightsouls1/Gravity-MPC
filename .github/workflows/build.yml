@@ -17,17 +17,22 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install Build Dependencies
+      - name: Install Build Dependencies & Cross-Compilers
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential cmake ninja-build
+          sudo apt-get install -y build-essential cmake ninja-build g++-arm-linux-gnueabihf gcc-arm-linux-gnueabihf
 
-      - name: Download SDK via Zip
+      - name: Clone SDK Correctly
         run: |
-          curl -L https://github.com/inmusic-software/mpc-plugins-sdk/archive/refs/heads/main.zip -o sdk.zip
-          unzip -q sdk.zip
-          mv mpc-plugins-sdk-main sdk
+          if [ -d "sdk" ]; then rm -rf sdk; fi
+          git clone https://github.com/inmusic-software/mpc-plugins-sdk.git sdk || { echo "Git clone failed"; exit 1; }
 
-      - name: Run Build Tool (Verbose Debug)
+      - name: Run Build Tool
         run: |
-          python sdk/tools/build.py plugins/Gravity --verbose
+          python sdk/tools/build.py plugins/Gravity
+
+      - name: Upload Plugin Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Gravity-MPC-Plugin
+          path: plugins/Gravity/build/
