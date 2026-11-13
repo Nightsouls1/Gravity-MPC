@@ -28,9 +28,9 @@ jobs:
           unzip -q sdk.zip
           mv mpc-plugins-sdk-main sdk
 
-      - name: Run Build Tool
+      - name: Run Build Tool with Debug Output
         run: |
-          python sdk/tools/build.py plugins/Gravity
+          python -u sdk/tools/build.py plugins/Gravity || exit 1
 
       - name: Upload Plugin Artifact
         uses: actions/upload-artifact@v4
