@@ -17,13 +17,15 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Clone SDK
+      - name: Download SDK via Zip
         run: |
-          git clone https://github.com/inmusic-software/mpc-plugins-sdk.git sdk
+          curl -L https://github.com/inmusic-software/mpc-plugins-sdk/archive/refs/heads/main.zip -o sdk.zip
+          unzip -q sdk.zip
+          mv mpc-plugins-sdk-main sdk
 
-      - name: Run Build Tool with Verbose Output
+      - name: Run Build Tool
         run: |
-          python sdk/tools/build.py plugins/Gravity --verbose || python sdk/tools/build.py plugins/Gravity
+          python sdk/tools/build.py plugins/Gravity
 
       - name: Upload Plugin Artifact
         uses: actions/upload-artifact@v4
