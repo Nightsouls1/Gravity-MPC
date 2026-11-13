@@ -19,7 +19,7 @@ jobs:
 
       - name: Run Akai MPC Build Tool
         run: |
-          git clone https://github.com/inmusic-software/mpc-plugins-sdk.git sdk || true
+          git clone https://github.com/inmusic-software/mpc-plugins-sdk.git sdk
           python sdk/tools/build.py plugins/Gravity
 
       - name: Upload Plugin Artifact
