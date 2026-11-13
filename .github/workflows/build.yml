@@ -25,7 +25,7 @@ jobs:
       - name: Clone SDK Securely with Token
         run: |
           rm -rf sdk
-          git clone https://x-access-token:${{ secrets.SDK_PAT }}@github.com/inmusic-software/mpc-plugins-sdk.git sdk
+          git clone https://x-access-token:${{ secrets.SDK_PAT }}@github.com/JOUW_GITHUB_GEBRUIKERSNAAM_OF_ORG/mpc-plugin-sdk.git sdk
 
       - name: Run Build Tool
         run: |
