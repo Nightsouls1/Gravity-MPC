@@ -22,10 +22,16 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential cmake ninja-build g++-arm-linux-gnueabihf gcc-arm-linux-gnueabihf
 
-      - name: Clone SDK Correctly
+      - name: Clone SDK
         run: |
           if [ -d "sdk" ]; then rm -rf sdk; fi
-          git clone https://github.com/inmusic-software/mpc-plugins-sdk.git sdk || { echo "Git clone failed"; exit 1; }
+          git clone https://github.com/inmusic-software/mpc-plugins-sdk.git sdk
+
+      - name: Verify Plugin Files
+        run: |
+          echo "Controleer mappenstructuur:"
+          ls -la plugins/Gravity
+          ls -la plugins/Gravity/src || echo "Waarschuwing: src map ontbreekt!"
 
       - name: Run Build Tool
         run: |
